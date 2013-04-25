@@ -1,7 +1,7 @@
 <?php
 namespace Yassa\Rollbar;
 
-use Rollbar as RollbarClient;
+use RollbarNotifier;
 use Zend\EventManager\EventInterface;
 
 class Module
@@ -11,7 +11,29 @@ class Module
         $config = $event->getApplication()->getServiceManager()->get('Config');
 
         if (isset($config['yassa_rollbar'])) {
-           RollbarClient::init($config['yassa_rollbar']);
+            $rollbar = new RollbarNotifier($config['yassa_rollbar']);
+
+            set_exception_handler(array($rollbar, "report_exception"));
+            set_error_handler(array($rollbar, "report_php_error"));
+            register_shutdown_function(
+                function () use ($rollbar) {
+                    // Catch any fatal errors that are causing the shutdown
+                    $last_error = error_get_last();
+                    if (!is_null($last_error)) {
+                        switch ($last_error['type']) {
+                            case E_ERROR:
+                                $rollbar->report_php_error(
+                                    $last_error['type'],
+                                    $last_error['message'],
+                                    $last_error['file'],
+                                    $last_error['line']
+                                );
+                                break;
+                        }
+                    }
+                    $rollbar->flush();
+                }
+            );
         }
     }
 
