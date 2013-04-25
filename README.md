@@ -15,7 +15,7 @@ Installation
 
 ### By cloning project
 
-1. Install the [rollbar-php](https://github.com/ZF-Commons/ZfcBase) by cloning it into `./vendor/`.
+1. Install the [rollbar-php](https://github.com/rollbar/rollbar-php) by cloning it into `./vendor/`.
 2. Clone this project into your `./vendor/` directory.
 
 ### With composer
