@@ -14,7 +14,6 @@ class Module
         // }
 
         RollbarNotifier::init(array('access_token' => '0faa035473dc4c68a3b56a67b531cfef'));
-        throw new \Exception('test 2');
     }
 
     public function getConfig()
