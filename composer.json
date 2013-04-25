@@ -1,22 +1,27 @@
 {
     "name": "yassa/rollbar",
+    "version": "0.1.0",
     "type": "project",
-    "description": "",
-    "license": "apache",
+    "description": "Zend Framework 2 module for connect to Rollbar",
+    "license": "Apache-2.0",
     "authors": [
         {
             "name": "Oleg Lobach",
             "email": "oleg@lobach.info",
-            "homepage": "http://lobach.info"
+            "homepage": "http://lobach.info",
+            "role": "developer"
         }
     ],
+    "require": {
+        "php": ">=5.3.3",
+        "rollbar/rollbar": "dev-master",
+        "zendframework/zend-eventmanager": "2.*",
+        "zendframework/zend-loader": "2.*"
+    },
     "autoload": {
         "psr-0": {
-            "Yassa\\Rollbar": ""
-        }
-    },
-    "extra": {
-        "class": "Yassa\\Rollbar\\Module"
-    },
-    "target-dir": "Yassa"
+            "Yassa\\Rollbar": "src/"
+        },
+        "files": ["Module.php"]
+    }
 }

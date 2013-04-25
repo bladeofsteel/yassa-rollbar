@@ -1,24 +1,22 @@
 <?php
 namespace Yassa\Rollbar;
 
-use Rollbar as RollbarNotifier;
+use Rollbar as RollbarClient;
 use Zend\EventManager\EventInterface;
 
 class Module
 {
     public function onBootstrap(EventInterface $event)
     {
-        // $config = $event->getApplication()->getServiceManager()->get('Config');
-        // if (isset($config['view_manager']['editor'])) {
-        //     $prettyPageHandler->setEditor($config['view_manager']['editor']);
-        // }
+        $config = $event->getApplication()->getServiceManager()->get('Config');
 
-        RollbarNotifier::init(array('access_token' => '0faa035473dc4c68a3b56a67b531cfef'));
+        if (isset($config['yassa_rollbar'])) {
+           RollbarClient::init($config['yassa_rollbar']);
+        }
     }
 
     public function getConfig()
     {
-        echo __METHOD__;
         return include __DIR__ . '/config/module.config.php';
     }
 
