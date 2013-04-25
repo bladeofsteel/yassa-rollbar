@@ -1,0 +1,22 @@
+{
+    "name": "yassa/rollbar",
+    "type": "project",
+    "description": "",
+    "license": "apache",
+    "authors": [
+        {
+            "name": "Oleg Lobach",
+            "email": "oleg@lobach.info",
+            "homepage": "http://lobach.info"
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "Yassa\\Rollbar": ""
+        }
+    },
+    "extra": {
+        "class": "Yassa\\Rollbar\\Module"
+    },
+    "target-dir": "Yassa"
+}
