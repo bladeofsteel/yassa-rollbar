@@ -22,6 +22,6 @@
         "psr-0": {
             "Yassa\\Rollbar": "src/"
         },
-        "files": ["Module.php"]
+        "classmap": ["Module.php"]
     }
 }
