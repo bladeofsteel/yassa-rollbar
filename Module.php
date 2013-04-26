@@ -8,7 +8,10 @@ class Module
 {
     public function onBootstrap(EventInterface $event)
     {
-        $config = $event->getApplication()->getServiceManager()->get('Config');
+        /** @var \Zend\Mvc\ApplicationInterface $application */
+        $application = $event->getApplication();
+
+        $config = $application->getServiceManager()->get('Config');
 
         if (isset($config['yassa_rollbar'])) {
             $rollbarConfig = $config['yassa_rollbar'];
@@ -17,6 +20,14 @@ class Module
 
             if (isset($rollbarConfig['exceptionhandler']) && true === $rollbarConfig['exceptionhandler']) {
                 set_exception_handler(array($rollbar, "report_exception"));
+
+                $eventManager = $application->getEventManager();
+                $eventManager->attach('dispatch.error', function($event) use($rollbar) {
+                    $exception = $event->getResult()->exception;
+                    if ($exception) {
+                        $rollbar->report_exception($exception);
+                    }
+                });
             }
             if (isset($rollbarConfig['errorhandler']) && true === $rollbarConfig['errorhandler']) {
                 set_error_handler(array($rollbar, "report_php_error"));
