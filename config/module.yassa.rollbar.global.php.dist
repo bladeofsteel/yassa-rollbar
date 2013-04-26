@@ -12,6 +12,21 @@ $settings = array(
     //'access_token' => '',
 
     /**
+     * Register Rollbar as an exception handler to log PHP exceptions
+     */
+    //'exceptionhandler' => true,
+
+    /**
+     * Register Rollbar as an error handler to log PHP errors
+     */
+    //'errorhandler' => true,
+
+    /**
+     * Register Rollbar as an shutdown function
+     */
+    //'shutdownfunction' => true,
+
+    /**
      * the base api url to post to (default 'https://api.rollbar.com/api/1/')
      */
     //'base_api_url' => '',

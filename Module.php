@@ -11,29 +11,37 @@ class Module
         $config = $event->getApplication()->getServiceManager()->get('Config');
 
         if (isset($config['yassa_rollbar'])) {
-            $rollbar = new RollbarNotifier($config['yassa_rollbar']);
+            $rollbarConfig = $config['yassa_rollbar'];
 
-            set_exception_handler(array($rollbar, "report_exception"));
-            set_error_handler(array($rollbar, "report_php_error"));
-            register_shutdown_function(
-                function () use ($rollbar) {
-                    // Catch any fatal errors that are causing the shutdown
-                    $last_error = error_get_last();
-                    if (!is_null($last_error)) {
-                        switch ($last_error['type']) {
-                            case E_ERROR:
-                                $rollbar->report_php_error(
-                                    $last_error['type'],
-                                    $last_error['message'],
-                                    $last_error['file'],
-                                    $last_error['line']
-                                );
-                                break;
+            $rollbar = new RollbarNotifier($rollbarConfig);
+
+            if (isset($rollbarConfig['exceptionhandler']) && true === $rollbarConfig['exceptionhandler']) {
+                set_exception_handler(array($rollbar, "report_exception"));
+            }
+            if (isset($rollbarConfig['errorhandler']) && true === $rollbarConfig['errorhandler']) {
+                set_error_handler(array($rollbar, "report_php_error"));
+            }
+            if (isset($rollbarConfig['shutdownfunction']) && true === $rollbarConfig['shutdownfunction']) {
+                register_shutdown_function(
+                    function () use ($rollbar) {
+                        // Catch any fatal errors that are causing the shutdown
+                        $last_error = error_get_last();
+                        if (!is_null($last_error)) {
+                            switch ($last_error['type']) {
+                                case E_ERROR:
+                                    $rollbar->report_php_error(
+                                        $last_error['type'],
+                                        $last_error['message'],
+                                        $last_error['file'],
+                                        $last_error['line']
+                                    );
+                                    break;
+                            }
                         }
+                        $rollbar->flush();
                     }
-                    $rollbar->flush();
-                }
-            );
+                );
+            }
         }
     }
 
