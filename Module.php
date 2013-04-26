@@ -22,25 +22,7 @@ class Module
                 set_error_handler(array($rollbar, "report_php_error"));
             }
             if (isset($rollbarConfig['shutdownfunction']) && true === $rollbarConfig['shutdownfunction']) {
-                register_shutdown_function(
-                    function () use ($rollbar) {
-                        // Catch any fatal errors that are causing the shutdown
-                        $last_error = error_get_last();
-                        if (!is_null($last_error)) {
-                            switch ($last_error['type']) {
-                                case E_ERROR:
-                                    $rollbar->report_php_error(
-                                        $last_error['type'],
-                                        $last_error['message'],
-                                        $last_error['file'],
-                                        $last_error['line']
-                                    );
-                                    break;
-                            }
-                        }
-                        $rollbar->flush();
-                    }
-                );
+                register_shutdown_function( $this->shutdownHandler($rollbar));
             }
         }
     }
@@ -62,5 +44,30 @@ class Module
                 ),
             ),
         );
+    }
+
+    /**
+     * @param RollbarNotifier $rollbar
+     * @return callable
+     */
+    protected function shutdownHandler($rollbar)
+    {
+        return function () use ($rollbar) {
+            // Catch any fatal errors that are causing the shutdown
+            $last_error = error_get_last();
+            if (!is_null($last_error)) {
+                switch ($last_error['type']) {
+                    case E_ERROR:
+                        $rollbar->report_php_error(
+                            $last_error['type'],
+                            $last_error['message'],
+                            $last_error['file'],
+                            $last_error['line']
+                        );
+                        break;
+                }
+            }
+            $rollbar->flush();
+        };
     }
 }
