@@ -19,6 +19,8 @@
  * @copyright  Copyright (c) 2013 Oleg Lobach <oleg@lobach.info>
  * @license    Apache License V2 <http://www.apache.org/licenses/LICENSE-2.0.html>
  * @author     Oleg Lobach <oleg@lobach.info>
+ * @version    0.1.3
+ * @since      0.1.3
  */
 
 namespace Yassa\Rollbar\Options;
@@ -26,6 +28,11 @@ namespace Yassa\Rollbar\Options;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
+/**
+ * Factory for ModuleOptions class
+ *
+ * @package Yassa\Rollbar\Options
+ */
 class ModuleOptionsFactory implements FactoryInterface
 {
     /**
