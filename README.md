@@ -1,6 +1,8 @@
 yassa-rollbar
 =============
 
+[![Build Status](https://travis-ci.org/bladeofsteel/yassa-rollbar.png?branch=master)](https://travis-ci.org/bladeofsteel/yassa-rollbar)
+
 This is ZF2 module that implements the notifier for Rollbar. Catches and reports
 exceptions to [Rollbar.com](https://rollbar.com/) for alerts, reporting, and analysis.
 
