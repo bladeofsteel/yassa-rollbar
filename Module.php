@@ -40,14 +40,13 @@ class Module
         /** @var \Zend\Mvc\ApplicationInterface $application */
         $application = $event->getApplication();
 
-        $config = $application->getServiceManager()->get('Config');
+        /** @var \Yassa\Rollbar\Options\ModuleOptions $options */
+        $options = $application->getServiceManager()->get('Yassa\Rollbar\Options\ModuleOptions');
 
-        if (isset($config['yassa_rollbar'])) {
-            $rollbarConfig = $config['yassa_rollbar'];
+        if ($options->enabled) {
+            $rollbar = new RollbarNotifier($options->toArray());
 
-            $rollbar = new RollbarNotifier($rollbarConfig);
-
-            if (isset($rollbarConfig['exceptionhandler']) && true === $rollbarConfig['exceptionhandler']) {
+            if ($options->exceptionhandler) {
                 set_exception_handler(array($rollbar, "report_exception"));
 
                 $eventManager = $application->getEventManager();
@@ -58,10 +57,10 @@ class Module
                     }
                 });
             }
-            if (isset($rollbarConfig['errorhandler']) && true === $rollbarConfig['errorhandler']) {
+            if ($options->errorhandler) {
                 set_error_handler(array($rollbar, "report_php_error"));
             }
-            if (isset($rollbarConfig['shutdownfunction']) && true === $rollbarConfig['shutdownfunction']) {
+            if ($options->shutdownfunction) {
                 register_shutdown_function( $this->shutdownHandler($rollbar));
             }
         }

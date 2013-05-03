@@ -166,4 +166,32 @@ class ModuleOptions extends AbstractOptions
      * @var bool Register Rollbar as an shutdown function
      */
     protected $shutdownfunction;
+
+    /**
+     * {@inheridoc}
+     */
+    public function __set($key, $value)
+    {
+        if (!property_exists(__CLASS__, $key)) {
+            throw new Exception\InvalidArgumentException (
+                'The option "' . $key . '" does not exists'
+            );
+        }
+
+        $this->{$key} = $value;
+    }
+
+    /**
+     * {@inheridoc}
+     */
+    public function __get($key)
+    {
+        if (!property_exists(__CLASS__, $key)) {
+            throw new Exception\InvalidArgumentException (
+                'The option "' . $key . '" does not exists'
+            );
+        }
+
+        return $this->{$key};
+    }
 }

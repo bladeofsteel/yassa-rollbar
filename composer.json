@@ -16,7 +16,8 @@
         "php": ">=5.3.3",
         "rollbar/rollbar": "dev-master",
         "zendframework/zend-eventmanager": "2.*",
-        "zendframework/zend-loader": "2.*"
+        "zendframework/zend-loader": "2.*",
+        "zendframework/zend-servicemanager": "2.*"
     },
     "autoload": {
         "psr-0": {
