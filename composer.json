@@ -19,6 +19,10 @@
         "zendframework/zend-loader": "2.*",
         "zendframework/zend-servicemanager": "2.*"
     },
+    "require-dev": {
+        "phpunit/phpunit": "3.7.*",
+        "zendframework/zend-mvc": "2.*"
+    },
     "autoload": {
         "psr-0": {
             "Yassa\\Rollbar": "src/"

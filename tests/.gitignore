@@ -1,0 +1,3 @@
+log/coverage
+phpunit.xml
+phpunit.phar

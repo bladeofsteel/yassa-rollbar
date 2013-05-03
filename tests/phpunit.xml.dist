@@ -1,0 +1,16 @@
+<phpunit
+    bootstrap="./Bootstrap.php"
+    colors="true"
+    backupGlobals="false"
+>
+    <testsuites>
+        <testsuite name="Yassa Rollbar Test Suite">
+            <directory>./</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist>
+            <directory suffix='.php'>../src/</directory>
+        </whitelist>
+    </filter>
+</phpunit>
