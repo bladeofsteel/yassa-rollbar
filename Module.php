@@ -27,13 +27,15 @@ namespace Yassa\Rollbar;
 
 use RollbarNotifier;
 use Zend\EventManager\EventInterface;
+use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
+use Zend\ModuleManager\Feature\ConfigProviderInterface;
 
 /**
  * Class Module
  *
  * @package Yassa\Rollbar
  */
-class Module
+class Module implements AutoloaderProviderInterface, ConfigProviderInterface
 {
     public function onBootstrap(EventInterface $event)
     {
@@ -44,7 +46,8 @@ class Module
         $options = $application->getServiceManager()->get('Yassa\Rollbar\Options\ModuleOptions');
 
         if ($options->enabled) {
-            $rollbar = new RollbarNotifier($options->toArray());
+            /** @var RollbarNotifier $rollbar */
+            $rollbar = $application->getServiceManager()->get('RollbarNotifier');
 
             if ($options->exceptionhandler) {
                 set_exception_handler(array($rollbar, "report_exception"));
@@ -66,11 +69,21 @@ class Module
         }
     }
 
+    /**
+     * Returns configuration to merge with application configuration
+     *
+     * @return array|\Traversable
+     */
     public function getConfig()
     {
         return include __DIR__ . '/config/module.config.php';
     }
 
+    /**
+     * Return an array for passing to Zend\Loader\AutoloaderFactory.
+     *
+     * @return array
+     */
     public function getAutoloaderConfig()
     {
         return array(
