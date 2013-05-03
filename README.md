@@ -58,6 +58,7 @@ Options
 
 The following options are available:
 
+- **enabled** - Switch On/Off module
 - **access_token** - Your project access token
 - **base_api_url** - The base API url to post to. (default: https://api.rollbar.com/api/1/)
 - **batch_size** - Flush batch early if it reaches this size (to prevent memory issues). (default: 50)
@@ -70,6 +71,8 @@ The following options are available:
   Sample rates are ratio out of 1, e.g. 0 is "never report", 1 is "always report", and 0.1 is
   "report 10% of the time". Sampling is done on a per-error basis. (default: array(), meaning
   all errors are reported.)
+- **errorhandler** - Register Rollbar as an error handler to log PHP errors
+- **exceptionhandler** - Register Rollbar as an exception handler to log PHP exceptions
 - **host** - Server hostname. (default: null, which will defer to a call to gethostname()
   (or php_uname('n') if that function does not exist))
 - **logger** - An object with a log($level, $message) method. Will be used by RollbarNotifier to log messages.
@@ -88,4 +91,5 @@ The following options are available:
   `array('passwd', 'password', 'secret', 'confirm_password', 'password_confirmation')`)
 - **shift_function** - Whether to shift function names in stack traces down one frame,
   so that the function name correctly reflects the context of each frame. (default: true)
+- **shutdownfunction** - Register Rollbar as an shutdown function
 - **timeout** - Request timeout for posting to Rollbar, in seconds. (default: 3)
