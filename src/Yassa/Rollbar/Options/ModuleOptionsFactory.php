@@ -1,6 +1,6 @@
 <?php
 /**
- * Custom composer installer for Vagrant environment
+ * Module options factory
  *
  * Copyright 2013 Oleg Lobach <oleg@lobach.info>
  *
