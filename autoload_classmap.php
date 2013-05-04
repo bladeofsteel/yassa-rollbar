@@ -7,4 +7,5 @@ return array(
     'Yassa\Rollbar\Factory\RollbarNotifierFactory'             => __DIR__ . '/src/Yassa/Rollbar/Factory/RollbarNotifierFactory.php',
     'Yassa\Rollbar\Options\Exception\InvalidArgumentException' => __DIR__ . '/src/Yassa/Rollbar/Options/Exception/InvalidArgumentException.php',
     'Yassa\Rollbar\Options\Exception\ExceptionInterface'       => __DIR__ . '/src/Yassa/Rollbar/Options/Exception/ExceptionInterface.php',
+    'Yassa\Rollbar\Log\Writer\Rollbar'                         => __DIR__ . '/src/Yassa/Rollbar/Log/Writer/Rollbar.php',
 );
