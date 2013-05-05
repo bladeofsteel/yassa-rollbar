@@ -9,7 +9,7 @@ $settings = array(
     /**
      * Enabled module or not
      */
-    //'enabled' = true,
+    //'enabled' => true,
     /**
      * your project access token
      */
