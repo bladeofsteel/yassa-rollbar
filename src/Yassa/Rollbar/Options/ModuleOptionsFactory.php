@@ -43,6 +43,7 @@ class ModuleOptionsFactory implements FactoryInterface
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $config = $serviceLocator->get('Config');
+
         return new ModuleOptions(isset($config['yassa_rollbar']) ? $config['yassa_rollbar'] : array());
     }
 }

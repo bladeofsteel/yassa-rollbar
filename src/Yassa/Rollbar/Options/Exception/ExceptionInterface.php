@@ -25,7 +25,6 @@
 
 namespace Yassa\Rollbar\Options\Exception;
 
-
 /**
  * Exception marker interface
  */

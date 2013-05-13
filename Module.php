@@ -53,7 +53,7 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface
                 set_exception_handler(array($rollbar, "report_exception"));
 
                 $eventManager = $application->getEventManager();
-                $eventManager->attach('dispatch.error', function($event) use($rollbar) {
+                $eventManager->attach('dispatch.error', function($event) use ($rollbar) {
                     $exception = $event->getResult()->exception;
                     if ($exception) {
                         $rollbar->report_exception($exception);
@@ -99,7 +99,7 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface
     }
 
     /**
-     * @param RollbarNotifier $rollbar
+     * @param  RollbarNotifier $rollbar
      * @return callable
      */
     protected function shutdownHandler($rollbar)
