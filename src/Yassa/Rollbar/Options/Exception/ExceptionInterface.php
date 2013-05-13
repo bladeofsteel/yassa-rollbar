@@ -19,12 +19,11 @@
  * @copyright  Copyright (c) 2013 Oleg Lobach <oleg@lobach.info>
  * @license    Apache License V2 <http://www.apache.org/licenses/LICENSE-2.0.html>
  * @author     Oleg Lobach <oleg@lobach.info>
- * @version    0.2.0
+ * @version    0.3.0
  * @since      0.1.3
  */
 
 namespace Yassa\Rollbar\Options\Exception;
-
 
 /**
  * Exception marker interface

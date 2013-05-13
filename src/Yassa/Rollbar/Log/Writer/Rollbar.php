@@ -19,7 +19,7 @@
  * @copyright  Copyright (c) 2013 Oleg Lobach <oleg@lobach.info>
  * @license    Apache License V2 <http://www.apache.org/licenses/LICENSE-2.0.html>
  * @author     Oleg Lobach <oleg@lobach.info>
- * @version    0.2.0
+ * @version    0.3.0
  * @since      0.2.0
  */
 
@@ -27,7 +27,6 @@ namespace Yassa\Rollbar\Log\Writer;
 
 use DateTime;
 use RollbarNotifier;
-use Zend\Log\Exception;
 use Zend\Log\Formatter\FormatterInterface;
 use Zend\Log\Writer\AbstractWriter;
 
@@ -54,7 +53,7 @@ class Rollbar extends AbstractWriter
     /**
      * This writer does not support formatting.
      *
-     * @param string|FormatterInterface $formatter
+     * @param  string|FormatterInterface $formatter
      * @return WriterInterface
      */
     public function setFormatter($formatter)
@@ -65,7 +64,7 @@ class Rollbar extends AbstractWriter
     /**
      * Write a message to the log.
      *
-     * @param array $event Event data
+     * @param  array $event Event data
      * @return void
      */
     protected function doWrite(array $event)

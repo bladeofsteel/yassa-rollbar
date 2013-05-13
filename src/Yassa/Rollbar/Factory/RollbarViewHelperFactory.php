@@ -1,6 +1,6 @@
 <?php
 /**
- * Yassa Rollbar test case
+ * Factory for view helper
  *
  * Copyright 2013 Oleg Lobach <oleg@lobach.info>
  *
@@ -20,23 +20,29 @@
  * @license    Apache License V2 <http://www.apache.org/licenses/LICENSE-2.0.html>
  * @author     Oleg Lobach <oleg@lobach.info>
  * @version    0.3.0
- * @since      0.1.4
+ * @since      0.3.0
  */
 
-namespace YassaRollbarTest\Factory;
+namespace Yassa\Rollbar\Factory;
 
-use YassaRollbarTest\TestCase;
+use Yassa\Rollbar\View\Helper\Rollbar;
+use Zend\ServiceManager\FactoryInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
- * Test for RollbarLogWriterFactory class
+ * Factory for View\Helper\Rollbar class
  *
- * @package YassaRollbarTest\Factory
+ * @package Yassa\Rollbar\Factory
  */
-class RollbarNotifierFactoryTest extends TestCase
+class RollbarViewHelperFactory implements FactoryInterface
 {
-    public function testModuleOptions()
+    /**
+     * {@inheritdocs}
+     */
+    public function createService(ServiceLocatorInterface $sl)
     {
-        $options = $this->getServiceLocator()->get('Yassa\Rollbar\Log\Writer\Rollbar');
-        $this->assertInstanceOf('\Yassa\Rollbar\Log\Writer\Rollbar', $options);
+        $options  = $sl->getServiceLocator()->get('Yassa\Rollbar\Options\ModuleOptions');
+
+        return new Rollbar($options);
     }
 }

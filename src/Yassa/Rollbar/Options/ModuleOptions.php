@@ -19,7 +19,7 @@
  * @copyright  Copyright (c) 2013 Oleg Lobach <oleg@lobach.info>
  * @license    Apache License V2 <http://www.apache.org/licenses/LICENSE-2.0.html>
  * @author     Oleg Lobach <oleg@lobach.info>
- * @version    0.2.0
+ * @version    0.3.0
  * @since      0.1.3
  */
 
@@ -34,7 +34,8 @@ use Zend\Stdlib\AbstractOptions;
  * @package Yassa\Rollbar\Options
  *
  * @property bool $enabled Enabled module or not
- * @property string $access_token Project access token
+ * @property string $access_token Project server-side access token
+ * @property string $client_access_token Project client-side access token
  * @property bool $exceptionhandler Register Rollbar as an exception handler to log PHP exceptions
  * @property bool $errorhandler Register Rollbar as an error handler to log PHP errors
  * @property bool $shutdownfunction Register Rollbar as an shutdown function
@@ -67,9 +68,13 @@ class ModuleOptions extends AbstractOptions
      */
     protected $enabled = false;
     /**
-     * @var string project access token
+     * @var string project server-side access token
      */
     protected $access_token = '';
+    /**
+     * @var string project client-side access token
+     */
+    protected $client_access_token = '';
     /**
      * @var string The base api url to post to (default 'https://api.rollbar.com/api/1/')
      */
