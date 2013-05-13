@@ -20,23 +20,40 @@
  * @license    Apache License V2 <http://www.apache.org/licenses/LICENSE-2.0.html>
  * @author     Oleg Lobach <oleg@lobach.info>
  * @version    0.3.0
- * @since      0.1.4
+ * @since      0.3.0
  */
 
-namespace YassaRollbarTest\Factory;
+namespace YassaRollbarTest\ViewHelper;
 
+use Yassa\Rollbar\Options\ModuleOptions;
+use Yassa\Rollbar\View\Helper\Rollbar;
 use YassaRollbarTest\TestCase;
 
 /**
- * Test for RollbarLogWriterFactory class
+ * Test for RollbarViewHelperTest class
  *
  * @package YassaRollbarTest\Factory
  */
-class RollbarNotifierFactoryTest extends TestCase
+class RollbarViewHelperTest extends TestCase
 {
-    public function testModuleOptions()
+    public function testShouldReturnScript()
     {
-        $options = $this->getServiceLocator()->get('Yassa\Rollbar\Log\Writer\Rollbar');
-        $this->assertInstanceOf('\Yassa\Rollbar\Log\Writer\Rollbar', $options);
+        $params = array(
+            'environment' => 'test',
+            'client_access_token' => 'YOUR_ACCESS_TOKEN',
+        );
+
+        $mock = $this->getMock('\Yassa\Rollbar\Options\ModuleOptions', array(), array(), '', false);
+        $i = -1;
+        foreach ($params as $k => $v) {
+            $mock->expects($this->at(++$i))
+                 ->method('__get')
+                 ->with( $this->equalTo($k))
+                 ->will($this->returnValue($v));
+        }
+
+        $helper = new Rollbar($mock);
+        $result = $helper();
+        $this->assertStringEqualsFile(__DIR__ . '/_files/script.txt', $result);
     }
 }

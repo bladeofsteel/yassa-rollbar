@@ -11,9 +11,14 @@ $settings = array(
      */
     //'enabled' => true,
     /**
-     * your project access token
+     * your project server-side access token
      */
     //'access_token' => '',
+
+    /**
+     * your project client-side access token
+     */
+    //'client_access_token' => '',
 
     /**
      * Register Rollbar as an exception handler to log PHP exceptions

@@ -20,7 +20,7 @@
  * @license    Apache License V2 <http://www.apache.org/licenses/LICENSE-2.0.html>
  * @author     Oleg Lobach <oleg@lobach.info>
  * @version    0.3.0
- * @since      0.1.4
+ * @since      0.3.0
  */
 
 namespace YassaRollbarTest\Factory;
@@ -28,15 +28,15 @@ namespace YassaRollbarTest\Factory;
 use YassaRollbarTest\TestCase;
 
 /**
- * Test for RollbarLogWriterFactory class
+ * Test for RollbarViewHelperFactory class
  *
  * @package YassaRollbarTest\Factory
  */
-class RollbarNotifierFactoryTest extends TestCase
+class RollbarViewHelperFactoryTest extends TestCase
 {
-    public function testModuleOptions()
+    public function testFactoryShouldReturnHelper()
     {
-        $options = $this->getServiceLocator()->get('Yassa\Rollbar\Log\Writer\Rollbar');
-        $this->assertInstanceOf('\Yassa\Rollbar\Log\Writer\Rollbar', $options);
+        $helper = $this->getServiceLocator()->get('ViewHelperManager')->get('rollbar');
+        $this->assertInstanceOf('\Yassa\Rollbar\View\Helper\Rollbar', $helper);
     }
 }

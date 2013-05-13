@@ -7,4 +7,9 @@ return array(
             'Yassa\Rollbar\Log\Writer\Rollbar'    => 'Yassa\Rollbar\Factory\RollbarLogWriterFactory',
         ),
     ),
+    'view_helpers' => array(
+        'factories' => array(
+            'rollbar'    => 'Yassa\Rollbar\Factory\RollbarViewHelperFactory',
+        ),
+    ),
 );
