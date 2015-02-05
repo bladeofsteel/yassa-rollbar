@@ -1,6 +1,8 @@
 yassa-rollbar
 =============
 
+[![Join the chat at https://gitter.im/bladeofsteel/yassa-rollbar](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/bladeofsteel/yassa-rollbar?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 [![Build Status](https://travis-ci.org/bladeofsteel/yassa-rollbar.png?branch=master)](https://travis-ci.org/bladeofsteel/yassa-rollbar)&nbsp;[![Dependency Status](https://www.versioneye.com/user/projects/518fd6feb1e3ae00020014a1/badge.png)](https://www.versioneye.com/user/projects/518fd6feb1e3ae00020014a1)
 
 This is ZF2 module that implements the notifier for Rollbar. Catches and reports
