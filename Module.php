@@ -49,14 +49,6 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface
             /** @var RollbarNotifier $rollbar */
             $rollbar = $application->getServiceManager()->get('RollbarNotifier');
 
-            // Response test
-            /*
-            $response = $rollbar::log(\Rollbar\Payload\Level::info(), 'testing wasSuccessful()');
-            if (!$response->wasSuccessful()) {
-                throw new \Exception('logging with Rollbar failed');
-            }
-            */
-
             if ($options->exceptionhandler) {
                 set_exception_handler(array($rollbar, "report_exception"));
 

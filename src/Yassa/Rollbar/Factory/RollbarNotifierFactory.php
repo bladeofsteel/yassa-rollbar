@@ -52,10 +52,7 @@ class RollbarNotifierFactory implements FactoryInterface
             'use_error_reporting' => $opt['use_error_reporting'] ?? false,
             // 'proxy' - no need to set here
         ];
-        /*
-        ToDO decide the better way to sync RB options with Yassa options, below is Yassa array sample
-         Array ( [enabled] => 1 [access_token] => 05e0731212174116ba8572c3f805c01f [client_access_token] => [base_api_url] => https://api.rollbar.com/api/1/ [batch_size] => 50 [batched] => 1 [branch] => master [capture_error_backtraces] => 1 [environment] => development [error_sample_rates] => Array ( ) [handler] => blocking [agent_log_location] => /var/www [host] => [logger] => [max_errno] => 1024 [person] => Array ( ) [person_fn] => [root] => [scrub_fields] => Array ( [0] => passwd [1] => password [2] => secret [3] => confirm_password [4] => password_confirmation ) [shift_function] => 1 [timeout] => 3 [exceptionhandler] => 1 [errorhandler] => 1 [shutdownfunction] => 1 )
-         */
+
         $rb = new RollbarNotifier();
         $rb::init($optRollbar);
         return $rb;
