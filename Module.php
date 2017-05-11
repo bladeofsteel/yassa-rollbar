@@ -51,7 +51,7 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface
 
             // Response test
             /*
-            $response = $rollbar::log(Level::info(), 'testing wasSuccessful()');
+            $response = $rollbar::log(\Rollbar\Payload\Level::info(), 'testing wasSuccessful()');
             if (!$response->wasSuccessful()) {
                 throw new \Exception('logging with Rollbar failed');
             }
