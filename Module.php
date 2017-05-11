@@ -25,7 +25,7 @@
 
 namespace Yassa\Rollbar;
 
-use RollbarNotifier;
+use Rollbar\Rollbar as RollbarNotifier;
 use Zend\EventManager\EventInterface;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
@@ -48,6 +48,14 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface
         if ($options->enabled) {
             /** @var RollbarNotifier $rollbar */
             $rollbar = $application->getServiceManager()->get('RollbarNotifier');
+
+            // Response test
+            /*
+            $response = $rollbar::log(Level::info(), 'testing wasSuccessful()');
+            if (!$response->wasSuccessful()) {
+                throw new \Exception('logging with Rollbar failed');
+            }
+            */
 
             if ($options->exceptionhandler) {
                 set_exception_handler(array($rollbar, "report_exception"));
