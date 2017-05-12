@@ -26,7 +26,7 @@
 namespace Yassa\Rollbar\Log\Writer;
 
 use DateTime;
-use Rollbar\Rollbar as RollbarNotifier;
+use Yassa\Rollbar\RollbarNotifier;
 use Zend\Log\Formatter\FormatterInterface;
 use Zend\Log\Writer\AbstractWriter;
 use Zend\Log\Writer\WriterInterface;
