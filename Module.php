@@ -25,7 +25,6 @@
 
 namespace Yassa\Rollbar;
 
-use Rollbar\Rollbar as RollbarNotifier;
 use Zend\EventManager\EventInterface;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
