@@ -70,11 +70,18 @@ class Rollbar extends AbstractWriter
      */
     protected function doWrite(array $event)
     {
+        $priorityMask = [
+            'CRIT' => 'critical',
+            'WARN' => 'warning',
+            'ERR' => 'error',
+            'INFO' => 'info',
+            'DEBUG' => 'debug'
+        ];
         if (isset($event['timestamp']) && $event['timestamp'] instanceof DateTime) {
             $event['timestamp'] = $event['timestamp']->format(DateTime::W3C);
         }
         $extra = array_diff_key($event, array('message'=>'', 'priorityName' => '', 'priority' => 0));
 
-        $this->rollbar->report_message($event['message'], $event['priorityName'], $extra);
+        $this->rollbar->report_message($event['message'], $priorityMask[$event['priorityName']], $extra);
     }
 }
