@@ -25,7 +25,6 @@
 
 namespace Yassa\Rollbar;
 
-use RollbarNotifier;
 use Zend\EventManager\EventInterface;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
@@ -53,7 +52,7 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface
                 set_exception_handler(array($rollbar, "report_exception"));
 
                 $eventManager = $application->getEventManager();
-                $eventManager->attach('dispatch.error', function($event) use ($rollbar) {
+                $eventManager->attach('dispatch.error', function ($event) use ($rollbar) {
                     $exception = $event->getResult()->exception;
                     if ($exception) {
                         $rollbar->report_exception($exception);
@@ -64,7 +63,7 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface
                 set_error_handler(array($rollbar, "report_php_error"));
             }
             if ($options->shutdownfunction) {
-                register_shutdown_function( $this->shutdownHandler($rollbar));
+                register_shutdown_function($this->shutdownHandler($rollbar));
             }
         }
     }
@@ -116,10 +115,9 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface
                             $last_error['file'],
                             $last_error['line']
                         );
-                        break;
+                    break;
                 }
             }
-            $rollbar->flush();
         };
     }
 }

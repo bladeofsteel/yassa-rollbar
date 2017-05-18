@@ -26,9 +26,10 @@
 namespace Yassa\Rollbar\Log\Writer;
 
 use DateTime;
-use RollbarNotifier;
+use Yassa\Rollbar\RollbarNotifier;
 use Zend\Log\Formatter\FormatterInterface;
 use Zend\Log\Writer\AbstractWriter;
+use Zend\Log\Writer\WriterInterface;
 
 /**
  * Rollbar log writer.
@@ -36,14 +37,14 @@ use Zend\Log\Writer\AbstractWriter;
 class Rollbar extends AbstractWriter
 {
     /**
-     * \RollbarNotifier
+     * RollbarNotifier
      */
     protected $rollbar;
 
     /**
      * Constructor
      *
-     * @params \RollbarNotifier $rollbar
+     * @param RollbarNotifier $rollbar
      */
     public function __construct(RollbarNotifier $rollbar)
     {
@@ -69,11 +70,18 @@ class Rollbar extends AbstractWriter
      */
     protected function doWrite(array $event)
     {
+        $priorityMask = [
+            'CRIT' => 'critical',
+            'WARN' => 'warning',
+            'ERR' => 'error',
+            'INFO' => 'info',
+            'DEBUG' => 'debug'
+        ];
         if (isset($event['timestamp']) && $event['timestamp'] instanceof DateTime) {
             $event['timestamp'] = $event['timestamp']->format(DateTime::W3C);
         }
         $extra = array_diff_key($event, array('message'=>'', 'priorityName' => '', 'priority' => 0));
 
-        $this->rollbar->report_message($event['message'], $event['priorityName'], $extra);
+        $this->rollbar->report_message($event['message'], $priorityMask[$event['priorityName']], $extra);
     }
 }
