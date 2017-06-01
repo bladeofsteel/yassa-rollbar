@@ -25,7 +25,7 @@
 
 namespace Yassa\Rollbar\Options;
 
-use iRollbarLogger;
+use Rollbar\RollbarLogger;
 use Zend\Stdlib\AbstractOptions;
 
 /**
@@ -38,6 +38,7 @@ use Zend\Stdlib\AbstractOptions;
  * @property bool $exceptionhandler Register Rollbar as an exception handler to log PHP exceptions
  * @property bool $errorhandler Register Rollbar as an error handler to log PHP errors
  * @property bool $shutdownfunction Register Rollbar as an shutdown function
+ * @property bool $catch_apigility_errors Should we log ApiProblemResponse messages
  *
  * Rollbar 1.0 options:
  * @property string $access_token Project server-side access token
@@ -55,7 +56,7 @@ use Zend\Stdlib\AbstractOptions;
  * @property bool $include_error_code_context A boolean that indicates you wish to gather code context for instances of PHP Errors. This can take a while because it requires reading the file from disk, so it's off by default.
  * @property bool $include_exception_code_context A boolean that indicates you wish to gather code context for instances of PHP Exceptions. This can take a while because it requires reading the file from disk, so it's off by default.
  * @property string $included_errno A bitmask that includes all of the error levels to report.
- * @property iRollbarLogger $logger An object that has a log($level, $message) method
+ * @property RollbarLogger $logger An object that has a log($level, $message) method
  * @property array $person An associative array containing data about the currently-logged in user
  * @property string|array|callable $person_fn Callable Function reference returning an array like the one for 'person'
  * @property string $root Path to your project's root dir
@@ -191,7 +192,7 @@ class ModuleOptions extends AbstractOptions
     protected $included_errno;
 
     /**
-     * @var iRollbarLogger An object that has a log($level, $message) method
+     * @var RollbarLogger An object that has a log($level, $message) method
      */
     protected $logger;
 
@@ -274,6 +275,11 @@ class ModuleOptions extends AbstractOptions
      * @var bool record full stacktraces for PHP errors. default: true
      */
     protected $capture_error_backtraces = true;
+
+    /**
+     * @var bool should we log ApiProblemResponse messages
+     */
+    protected $catch_apigility_errors = false;
 
     /**
      * {@inheridoc}

@@ -210,6 +210,11 @@ $settings = array(
      * above E_USER_NOTICE. default: 1024 (ignore E_STRICT and above).
      */
     //'max_errno' => 1024,
+
+    /**
+     * Apigility not throwing errors so we need to cath special response types instead
+     */
+    'catch_apigility_errors' => false,
 );
 
 /**

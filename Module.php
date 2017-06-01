@@ -25,9 +25,9 @@
 
 namespace Yassa\Rollbar;
 
-use Zend\EventManager\EventInterface;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
+use Zend\Mvc\MvcEvent;
 
 /**
  * Class Module
@@ -36,7 +36,7 @@ use Zend\ModuleManager\Feature\ConfigProviderInterface;
  */
 class Module implements AutoloaderProviderInterface, ConfigProviderInterface
 {
-    public function onBootstrap(EventInterface $event)
+    public function onBootstrap(MvcEvent $event)
     {
         /** @var \Zend\Mvc\ApplicationInterface $application */
         $application = $event->getApplication();
@@ -64,6 +64,15 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface
             }
             if ($options->shutdownfunction) {
                 register_shutdown_function($this->shutdownHandler($rollbar));
+            }
+            if ($options->catch_apigility_errors) {
+                $eventManager = $application->getEventManager();
+                $eventManager->attach(MvcEvent::EVENT_FINISH, function (MvcEvent $event) use ($rollbar) {
+                    $exception = $event->getResult()->exception;
+                    if ($exception) {
+                        $rollbar->report_exception($exception);
+                    }
+                });
             }
         }
     }

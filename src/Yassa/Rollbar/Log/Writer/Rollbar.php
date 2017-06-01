@@ -48,6 +48,7 @@ class Rollbar extends AbstractWriter
      */
     public function __construct(RollbarNotifier $rollbar)
     {
+        parent::__construct();
         $this->rollbar = $rollbar;
     }
 
@@ -55,9 +56,10 @@ class Rollbar extends AbstractWriter
      * This writer does not support formatting.
      *
      * @param  string|FormatterInterface $formatter
+     * @param array
      * @return WriterInterface
      */
-    public function setFormatter($formatter)
+    public function setFormatter($formatter, array $options = null)
     {
         return $this;
     }
