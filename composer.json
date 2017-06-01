@@ -23,7 +23,8 @@
         "zendframework/zend-eventmanager": "^3.1",
         "zendframework/zend-loader": "2.*",
         "zendframework/zend-servicemanager": "^3.0",
-        "zendframework/zend-log": "2.*"
+        "zendframework/zend-log": "2.*",
+        "zfcampus/zf-api-problem": "^1.2"
     },
     "require-dev": {
         "phpunit/phpunit": "4.*",

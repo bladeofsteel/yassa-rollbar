@@ -25,9 +25,11 @@
 
 namespace Yassa\Rollbar;
 
+use Rollbar\Payload\Level;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\Mvc\MvcEvent;
+use ZF\ApiProblem\ApiProblemResponse;
 
 /**
  * Class Module
@@ -52,7 +54,7 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface
                 set_exception_handler(array($rollbar, "report_exception"));
 
                 $eventManager = $application->getEventManager();
-                $eventManager->attach('dispatch.error', function ($event) use ($rollbar) {
+                $eventManager->attach('dispatch.error', function (MvcEvent $event) use ($rollbar) {
                     $exception = $event->getResult()->exception;
                     if ($exception) {
                         $rollbar->report_exception($exception);
@@ -68,9 +70,11 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface
             if ($options->catch_apigility_errors) {
                 $eventManager = $application->getEventManager();
                 $eventManager->attach(MvcEvent::EVENT_FINISH, function (MvcEvent $event) use ($rollbar) {
-                    $exception = $event->getResult()->exception;
-                    if ($exception) {
-                        $rollbar->report_exception($exception);
+                    $result = $event->getResult();
+                    if ($result instanceof ApiProblemResponse) {
+                        $problem = $result->getApiProblem();
+                        $message = $problem->toArray();
+                        $rollbar->report_message(implode("\n", $message), Level::error());
                     }
                 });
             }
