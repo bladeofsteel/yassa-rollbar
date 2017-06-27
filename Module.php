@@ -29,6 +29,7 @@ use RollbarNotifier;
 use Zend\EventManager\EventInterface;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
+use Zend\Mvc\MvcEvent;
 
 /**
  * Class Module
@@ -53,8 +54,8 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface
                 set_exception_handler(array($rollbar, "report_exception"));
 
                 $eventManager = $application->getEventManager();
-                $eventManager->attach('dispatch.error', function($event) use ($rollbar) {
-                    $exception = $event->getResult()->exception;
+                $eventManager->attach(MvcEvent::EVENT_DISPATCH_ERROR, function($event) use ($rollbar) {
+                    $exception = $event->getResult()->exception ?? $event->getParam("exception");
                     if ($exception) {
                         $rollbar->report_exception($exception);
                     }
