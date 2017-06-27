@@ -3,7 +3,7 @@
 namespace Yassa\Rollbar\Factory;
 
 use Interop\Container\ContainerInterface;
-use RollbarNotifier;
+use Yassa\Rollbar\RollbarNotifier;
 use Zend\ServiceManager\Factory\FactoryInterface;
 
 /**
@@ -22,7 +22,11 @@ class RollbarNotifierFactory implements FactoryInterface
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $options  = $container->get('Yassa\Rollbar\Options\ModuleOptions');
+        $opt = $options->toArray();
+        unset($opt['base_api_url']); //  causes 404 todo Check future rollbar versions
 
-        return new RollbarNotifier($options->toArray());
+        $rb = new RollbarNotifier();
+        $rb::init($opt);
+        return $rb;
     }
 }

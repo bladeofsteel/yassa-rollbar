@@ -25,11 +25,11 @@
 
 namespace Yassa\Rollbar;
 
-use RollbarNotifier;
-use Zend\EventManager\EventInterface;
+use Rollbar\Payload\Level;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\Mvc\MvcEvent;
+use ZF\ApiProblem\ApiProblemResponse;
 
 /**
  * Class Module
@@ -38,7 +38,7 @@ use Zend\Mvc\MvcEvent;
  */
 class Module implements AutoloaderProviderInterface, ConfigProviderInterface
 {
-    public function onBootstrap(EventInterface $event)
+    public function onBootstrap(MvcEvent $event)
     {
         /** @var \Zend\Mvc\ApplicationInterface $application */
         $application = $event->getApplication();
@@ -65,7 +65,18 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface
                 set_error_handler(array($rollbar, "report_php_error"));
             }
             if ($options->shutdownfunction) {
-                register_shutdown_function( $this->shutdownHandler($rollbar));
+                register_shutdown_function($this->shutdownHandler($rollbar));
+            }
+            if ($options->catch_apigility_errors) {
+                $eventManager = $application->getEventManager();
+                $eventManager->attach(MvcEvent::EVENT_FINISH, function (MvcEvent $event) use ($rollbar) {
+                    $result = $event->getResult();
+                    if ($result instanceof ApiProblemResponse) {
+                        $problem = $result->getApiProblem();
+                        $message = $problem->toArray();
+                        $rollbar->report_message(implode("\n", $message), Level::error());
+                    }
+                });
             }
         }
     }
@@ -117,10 +128,9 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface
                             $last_error['file'],
                             $last_error['line']
                         );
-                        break;
+                    break;
                 }
             }
-            $rollbar->flush();
         };
     }
 }
