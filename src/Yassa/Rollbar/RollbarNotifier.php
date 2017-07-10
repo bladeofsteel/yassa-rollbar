@@ -41,7 +41,7 @@ class RollbarNotifier extends Rollbar
      */
     public static function report_message($message, $level = null, $extra_data = null, $payload_data = null)
     {
-        $level = $level ? Level::fromName($level) : Level::error();
+        $level = $level ? Level::$level() : Level::error();
         if ($payload_data) {
             $extra_data = array_merge($extra_data, $payload_data);
         }
