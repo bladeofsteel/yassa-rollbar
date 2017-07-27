@@ -25,10 +25,11 @@
 
 namespace Yassa\Rollbar;
 
-use RollbarNotifier;
-use Zend\EventManager\EventInterface;
+use Rollbar\Payload\Level;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
+use Zend\Mvc\MvcEvent;
+use ZF\ApiProblem\ApiProblemResponse;
 
 /**
  * Class Module
@@ -37,7 +38,7 @@ use Zend\ModuleManager\Feature\ConfigProviderInterface;
  */
 class Module implements AutoloaderProviderInterface, ConfigProviderInterface
 {
-    public function onBootstrap(EventInterface $event)
+    public function onBootstrap(MvcEvent $event)
     {
         /** @var \Zend\Mvc\ApplicationInterface $application */
         $application = $event->getApplication();
@@ -53,8 +54,8 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface
                 set_exception_handler(array($rollbar, "report_exception"));
 
                 $eventManager = $application->getEventManager();
-                $eventManager->attach('dispatch.error', function($event) use ($rollbar) {
-                    $exception = $event->getResult()->exception;
+                $eventManager->attach(MvcEvent::EVENT_DISPATCH_ERROR, function($event) use ($rollbar) {
+                    $exception = $event->getResult()->exception ?? $event->getParam("exception");
                     if ($exception) {
                         $rollbar->report_exception($exception);
                     }
@@ -64,7 +65,20 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface
                 set_error_handler(array($rollbar, "report_php_error"));
             }
             if ($options->shutdownfunction) {
-                register_shutdown_function( $this->shutdownHandler($rollbar));
+                register_shutdown_function($this->shutdownHandler($rollbar));
+            }
+            if ($options->catch_apigility_errors) {
+                $eventManager = $application->getEventManager();
+                $eventManager->attach(MvcEvent::EVENT_FINISH, function (MvcEvent $event) use ($rollbar) {
+                    $result = $event->getResult();
+                    if ($result instanceof ApiProblemResponse) {
+                        $problem = $result->getApiProblem();
+                        $problem->setDetailIncludesStackTrace(true);
+                        $message = $problem->toArray();
+                        $message['trace'] = json_encode($message['trace']);
+                        $rollbar->report_message($message['title'] . " : " . $message['detail'], Level::error(), $message['trace']);
+                    }
+                });
             }
         }
     }
@@ -116,10 +130,9 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface
                             $last_error['file'],
                             $last_error['line']
                         );
-                        break;
+                    break;
                 }
             }
-            $rollbar->flush();
         };
     }
 }
