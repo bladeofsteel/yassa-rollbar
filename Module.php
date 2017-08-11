@@ -55,10 +55,17 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface
                 set_exception_handler(array($rollbar, "report_exception"));
 
                 $eventManager = $application->getEventManager();
-                $eventManager->attach(MvcEvent::EVENT_DISPATCH_ERROR, function($event) use ($rollbar) {
+                $eventManager->attach(MvcEvent::EVENT_DISPATCH_ERROR, function(MvcEvent $event) use ($rollbar) {
                     $exception = $event->getResult()->exception ?? $event->getParam("exception");
                     if ($exception) {
                         $rollbar->report_exception($exception);
+
+                        $content = json_encode(['Error' => 'Fatal error. Please try again later.']);
+                        $response = new Response();
+                        $response->setStatusCode(Response::STATUS_CODE_200);
+                        $response->getHeaders()->addHeaders(['Content-type:application/json']);
+                        $response->setContent($content);
+                        $event->setResult($response);
                     }
                 });
             }
