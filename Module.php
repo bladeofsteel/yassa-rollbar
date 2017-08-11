@@ -29,6 +29,7 @@ use Rollbar\Payload\Level;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\Mvc\MvcEvent;
+use Zend\Http\Response;
 use ZF\ApiProblem\ApiProblemResponse;
 
 /**
@@ -77,6 +78,15 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface
                         $message = $problem->toArray();
                         $message['trace'] = json_encode($message['trace']);
                         $rollbar->report_message($message['title'] . " : " . $message['detail'], Level::error(), $message['trace']);
+
+                        $problem->setDetailIncludesStackTrace(false);
+                        $message = $problem->toArray();
+                        $content = json_encode(['Error' => $message['title']]);
+                        $response = new Response();
+                        $response->setStatusCode(Response::STATUS_CODE_200);
+                        $response->getHeaders()->addHeaders(['Content-type:application/json']);
+                        $response->setContent($content);
+                        $event->setResponse($response);
                     }
                 });
             }
