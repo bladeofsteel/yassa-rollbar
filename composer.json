@@ -1,8 +1,8 @@
 {
-    "name": "yassa/rollbar",
-    "version": "0.3.0",
+    "name": "prospect-one/yassa-rollbar",
+    "version": "0.4.0",
     "type": "project",
-    "description": "Zend Framework 2 module for connect to Rollbar",
+    "description": "Zend Framework 3 module for connect to Rollbar",
     "license": "Apache-2.0",
     "authors": [
         {
@@ -10,19 +10,25 @@
             "email": "oleg@lobach.info",
             "homepage": "http://lobach.info",
             "role": "developer"
+        },
+        {
+            "name": "Illia Kovalov",
+            "email": "ikovalyov85@gmail.com",
+            "role": "developer"
         }
     ],
     "require": {
         "php": ">=5.3.3",
-        "rollbar/rollbar": "dev-master",
-        "zendframework/zend-eventmanager": "2.*",
+        "rollbar/rollbar": "~1.0",
+        "zendframework/zend-eventmanager": "^3.1",
         "zendframework/zend-loader": "2.*",
-        "zendframework/zend-servicemanager": "2.*",
-        "zendframework/zend-log": "2.*"
+        "zendframework/zend-servicemanager": "^3.0",
+        "zendframework/zend-log": "2.*",
+        "zfcampus/zf-api-problem": "^1.2"
     },
     "require-dev": {
-        "phpunit/phpunit": "3.7.*",
-        "zendframework/zend-mvc": "2.*"
+        "phpunit/phpunit": "4.*",
+        "zendframework/zend-mvc": "3.*"
     },
     "autoload": {
         "psr-0": {

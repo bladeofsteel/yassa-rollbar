@@ -1,33 +1,10 @@
 <?php
-/**
- * RollbarNotifier class factory
- *
- * Copyright 2013 Oleg Lobach <oleg@lobach.info>
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- *
- * @copyright  Copyright (c) 2013 Oleg Lobach <oleg@lobach.info>
- * @license    Apache License V2 <http://www.apache.org/licenses/LICENSE-2.0.html>
- * @author     Oleg Lobach <oleg@lobach.info>
- * @version    0.3.0
- * @since      0.1.4
- */
 
 namespace Yassa\Rollbar\Factory;
 
-use RollbarNotifier;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Interop\Container\ContainerInterface;
+use Yassa\Rollbar\RollbarNotifier;
+use Zend\ServiceManager\Factory\FactoryInterface;
 
 /**
  * Factory for RolbarNotifier class
@@ -37,12 +14,19 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 class RollbarNotifierFactory implements FactoryInterface
 {
     /**
-     * {@inheritdocs}
+     * @param ContainerInterface $container
+     * @param string $requestedName
+     * @param array|null $options
+     * @return RollbarNotifier
      */
-    public function createService(ServiceLocatorInterface $sl)
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $options  = $sl->get('Yassa\Rollbar\Options\ModuleOptions');
+        $options  = $container->get('Yassa\Rollbar\Options\ModuleOptions');
+        $opt = $options->toArray();
+        unset($opt['base_api_url']); //  causes 404 todo Check future rollbar versions
 
-        return new RollbarNotifier($options->toArray());
+        $rb = new RollbarNotifier();
+        $rb::init($opt);
+        return $rb;
     }
 }
