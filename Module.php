@@ -62,7 +62,7 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface
 
                         $content = json_encode(['Error' => 'Fatal error. Please try again later.']);
                         $response = new Response();
-                        $response->setStatusCode(Response::STATUS_CODE_200);
+                        $response->setStatusCode(Response::STATUS_CODE_500);
                         $response->getHeaders()->addHeaders(['Content-type:application/json']);
                         $response->setContent($content);
                         $event->setResult($response);
@@ -90,7 +90,7 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface
                         $message = $problem->toArray();
                         $content = json_encode(['Error' => $message['title']]);
                         $response = new Response();
-                        $response->setStatusCode(Response::STATUS_CODE_200);
+                        $response->setStatusCode(Response::STATUS_CODE_500);
                         $response->getHeaders()->addHeaders(['Content-type:application/json']);
                         $response->setContent($content);
                         $event->setResponse($response);
