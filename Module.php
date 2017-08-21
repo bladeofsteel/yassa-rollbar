@@ -29,6 +29,7 @@ use Rollbar\Payload\Level;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\Mvc\MvcEvent;
+use Zend\Http\Response;
 use ZF\ApiProblem\ApiProblemResponse;
 
 /**
@@ -54,10 +55,17 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface
                 set_exception_handler(array($rollbar, "report_exception"));
 
                 $eventManager = $application->getEventManager();
-                $eventManager->attach(MvcEvent::EVENT_DISPATCH_ERROR, function($event) use ($rollbar) {
+                $eventManager->attach(MvcEvent::EVENT_DISPATCH_ERROR, function(MvcEvent $event) use ($rollbar) {
                     $exception = $event->getResult()->exception ?? $event->getParam("exception");
                     if ($exception) {
                         $rollbar->report_exception($exception);
+
+                        $content = json_encode(['Error' => 'Fatal error. Please try again later.']);
+                        $response = new Response();
+                        $response->setStatusCode(Response::STATUS_CODE_500);
+                        $response->getHeaders()->addHeaders(['Content-type:application/json']);
+                        $response->setContent($content);
+                        $event->setResult($response);
                     }
                 });
             }
@@ -77,6 +85,15 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface
                         $message = $problem->toArray();
                         $message['trace'] = json_encode($message['trace']);
                         $rollbar->report_message($message['title'] . " : " . $message['detail'], Level::error(), $message['trace']);
+
+                        $problem->setDetailIncludesStackTrace(false);
+                        $message = $problem->toArray();
+                        $content = json_encode(['Error' => $message['title']]);
+                        $response = new Response();
+                        $response->setStatusCode(Response::STATUS_CODE_500);
+                        $response->getHeaders()->addHeaders(['Content-type:application/json']);
+                        $response->setContent($content);
+                        $event->setResponse($response);
                     }
                 });
             }
