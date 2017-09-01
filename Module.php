@@ -85,6 +85,8 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface
                         $message = $problem->toArray();
                         if (isset($message['trace'])) {
                             $message['trace'] = json_encode($message['trace']);
+                        } else {
+                            $message['trace'] = "";
                         }
                         $rollbar->report_message($message['title'] . " : " . $message['detail'], Level::error(), $message['trace']);
 
