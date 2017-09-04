@@ -1,24 +1,17 @@
 <?php
 /**
  * Rollbar Configuration
+ * Rollbar 1.0
  *
  * If you have a ./config/autoload/ directory set up for your project, you can
  * drop this config file in it and change the values as you wish.
  */
 $settings = array(
+    /** Yassa settings */
     /**
      * Enabled module or not
      */
     //'enabled' => true,
-    /**
-     * your project server-side access token
-     */
-    //'access_token' => '',
-
-    /**
-     * your project client-side access token
-     */
-    //'client_access_token' => '',
 
     /**
      * Register Rollbar as an exception handler to log PHP exceptions
@@ -35,20 +28,24 @@ $settings = array(
      */
     //'shutdownfunction' => true,
 
+    /** Rollbar 1.0 settings */
+    /**
+     * your project server-side access token
+     */
+    //'access_token' => '',
+
+    /**
+     * Path to the directory where agent relay log files should be written.
+     * Should not include final slash. Only used when handler is "agent".
+     * Default: /var/www
+     */
+    //'agent_log_location' => '/var/www',
+
     /**
      * the base api url to post to (default 'https://api.rollbar.com/api/1/')
+     * For compatibility with Rollbar is unset in Factory
      */
     //'base_api_url' => '',
-
-    /**
-     * flush batch early if it reaches this size. default: 50
-     */
-    //'batch_size' => 50,
-
-    /**
-     * true to batch all reports from a single request together. default true.
-     */
-    //'batched' => true,
 
     /**
      * name of the current branch (default 'master')
@@ -56,13 +53,34 @@ $settings = array(
     //'branch' => 'master',
 
     /**
-     * record full stacktraces for PHP errors. default: true.
+     * record full stacktraces for PHP errors. default: true
      */
-    //'capture_error_backtraces' => true,
+    //'capture_error_stacktraces' => true,
 
     /**
-     * environment name, e.g. 'production' or 'development'
+     * Function called before sending payload to Rollbar, return true to stop the error from being sent to Rollbar. Default: null
+     * Parameters:
+     * $isUncaught: boolean value set to true if the error was an uncaught exception.
+     * $exception: a RollbarException instance that will allow you to get the message or exception
+     * $payload: an array containing the payload as it will be sent to Rollbar. Payload schema can be found
+     * at https://rollbar.com/docs/api/items_post/
      */
+    //'checkIgnore' => null,
+
+    /**
+     * Default null The currently-deployed version of your code/application (e.g. a Git SHA). Should be a string.
+     */
+    //'code_version' => null,
+
+    /**
+     * Set it to false to disable running iconv on the payload, may be needed if there is invalid characters,
+     * and the payload is being destroyed
+     */
+    //'enable_utf8_sanitization' => true,
+
+        /**
+         * environment name, e.g. 'production' or 'development'
+         */
     //'environment' => '',
 
     /**
@@ -81,29 +99,36 @@ $settings = array(
     //'handler' => 'blocking',
 
     /**
-     * Path to the directory where agent relay log files should be written.
-     * Should not include final slash. Only used when handler is "agent".
-     * Default: /var/www
-     */
-    //'agent_log_location' => '/var/www',
-
-    /**
      * server hostname. Default: null, which will result in a call to `gethostname()`
      * (or `php_uname('n')` if that function does not exist)
      */
     //'host' => null,
 
     /**
+     * A boolean that indicates you wish to gather code context for instances of PHP Errors.
+     * This can take a while because it requires reading the file from disk, so it's off by default.
+     */
+    //'include_error_code_context' => false,
+
+    /**
+     * A boolean that indicates you wish to gather code context for instances of PHP Exceptions.
+     * This can take a while because it requires reading the file from disk, so it's off by default.
+     */
+    //'include_exception_code_context' => false,
+
+    /**
+     * A bitmask that includes all of the error levels to report.
+     * E.g. (E_ERROR \| E_WARNING) to only report E_ERROR and E_WARNING errors. This will be used in combination with `error_reporting()`
+     * to prevent reporting of errors if `use_error_reporting` is set to `true`.
+     * Default: (E_ERROR | E_WARNING | E_PARSE | E_CORE_ERROR | E_USER_ERROR | E_RECOVERABLE_ERROR)
+     */
+    //'included_errno' => '',
+
+    /**
      * an object that has a log($level, $message) method. If provided, will be used
      * by RollbarNotifier to log messages.
      */
     //'logger' => null,
-
-    /**
-     * max PHP error number to report. e.g. 1024 will ignore all errors
-     * above E_USER_NOTICE. default: 1024 (ignore E_STRICT and above).
-     */
-    //'max_errno' => 1024,
 
     /**
      * an associative array containing data about the currently-logged in user.
@@ -142,6 +167,54 @@ $settings = array(
      * request timeout for posting to rollbar, in seconds. default 3.
      */
     //'timeout' => 3,
+
+    /**
+     * Sets whether errors suppressed with '@' should be reported or not
+     */
+    //'report_suppressed' => false,
+
+    /**
+     * Sets whether to respect current `error_reporting()` level or not
+     */
+    //'use_error_reporting' => false,
+
+    /**
+     * Send data via a proxy server. E.g. Using a local proxy with no authentication
+     * <?php $config['proxy'] = "127.0.0.1:8080"; ?>
+     */
+    //'proxy',
+
+    /** Settings below are not used at Rollbar 1.0 - do not use unless you know what you are doing */
+    /**
+     * your project client-side access token
+     */
+    //'client_access_token' => '',
+
+    /**
+     * flush batch early if it reaches this size. default: 50
+     */
+    //'batch_size' => 50,
+
+    /**
+     * true to batch all reports from a single request together. default true.
+     */
+    //'batched' => true,
+
+    /**
+     * record full stacktraces for PHP errors. default: true.
+     */
+    //'capture_error_backtraces' => true,
+
+    /**
+     * max PHP error number to report. e.g. 1024 will ignore all errors
+     * above E_USER_NOTICE. default: 1024 (ignore E_STRICT and above).
+     */
+    //'max_errno' => 1024,
+
+    /**
+     * Apigility not throwing errors so we need to cath special response types instead
+     */
+    'catch_apigility_errors' => false,
 );
 
 /**
