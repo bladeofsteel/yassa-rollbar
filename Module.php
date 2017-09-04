@@ -25,6 +25,7 @@
 
 namespace Yassa\Rollbar;
 
+use ProspectOne\UserModule\Exception\LogicException;
 use Rollbar\Payload\Level;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
@@ -83,6 +84,9 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface
                         $problem = $result->getApiProblem();
                         $problem->setDetailIncludesStackTrace(true);
                         $message = $problem->toArray();
+                        if (end($message) == LogicException::MESSAGE) {
+                            return;
+                        }
                         if (isset($message['trace'])) {
                             $message['trace'] = json_encode($message['trace']);
                         } else {
