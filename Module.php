@@ -85,6 +85,12 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface
                         $problem->setDetailIncludesStackTrace(true);
                         $message = $problem->toArray();
                         if (end($message) == LogicException::MESSAGE) {
+                            $response = new Response();
+                            $response->setStatusCode(Response::STATUS_CODE_401);
+                            $response->getHeaders()->addHeaders(['Content-type:application/json']);
+                            $content = "Unauthorized";
+                            $response->setContent($content);
+                            $event->setResponse($response);
                             return;
                         }
                         if (isset($message['trace'])) {
